@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue"
+import RegisterPage from "./components/RegisterPage.vue"
 
+const currentView = ref("notes")
 const showModal = ref(false)
 const newNote = ref("")
 const notes = ref([])
@@ -26,6 +28,14 @@ const addNote = () => {
 
 <template>
   <main>
+    <nav class="nav">
+      <button :class="{ active: currentView === 'notes' }" @click="currentView = 'notes'">Notes</button>
+      <button :class="{ active: currentView === 'register' }" @click="currentView = 'register'">Register</button>
+    </nav>
+
+    <RegisterPage v-if="currentView === 'register'" />
+
+    <template v-else>
     <div v-if="showModal" class="overlay">
       <div class="modal">
         <textarea v-model="newNote" name="note" id="note" cols="30" rows="10"></textarea>
@@ -47,6 +57,7 @@ const addNote = () => {
         </div>
       </div>
     </div>
+    </template>
   </main>
 </template>
 
@@ -54,6 +65,28 @@ const addNote = () => {
 main {
   width: 100vw;
   height: 100vh;
+}
+
+.nav {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 16px;
+}
+
+.nav button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid blueviolet;
+  border-radius: 0.25rem;
+  background-color: white;
+  color: blueviolet;
+  cursor: pointer;
+}
+
+.nav button.active {
+  background-color: blueviolet;
+  color: white;
 }
 
 .container {
