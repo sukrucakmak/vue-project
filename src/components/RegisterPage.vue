@@ -2,7 +2,8 @@
 import { ref } from "vue"
 
 const form = ref({
-  name: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
   passwordConfirm: ""
@@ -13,8 +14,12 @@ const registeredUser = ref(null)
 const validate = () => {
   const found = {}
 
-  if (form.value.name.trim().length < 3) {
-    found.name = "Name must be 3 characters or more"
+  if (form.value.firstName.trim().length < 2) {
+    found.firstName = "First name must be 2 characters or more"
+  }
+
+  if (form.value.lastName.trim().length < 2) {
+    found.lastName = "Last name must be 2 characters or more"
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email.trim())) {
@@ -39,11 +44,17 @@ const register = () => {
   }
 
   registeredUser.value = {
-    name: form.value.name.trim(),
+    name: `${form.value.firstName.trim()} ${form.value.lastName.trim()}`,
     email: form.value.email.trim()
   }
 
-  form.value = { name: "", email: "", password: "", passwordConfirm: "" }
+  form.value = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    passwordConfirm: ""
+  }
 }
 </script>
 
@@ -56,9 +67,13 @@ const register = () => {
     </p>
 
     <form novalidate @submit.prevent="register">
-      <label for="name">Name</label>
-      <input id="name" v-model="form.name" type="text" autocomplete="name" />
-      <p v-if="errors.name" class="errorMessage">{{ errors.name }}</p>
+      <label for="firstName">First name</label>
+      <input id="firstName" v-model="form.firstName" type="text" autocomplete="given-name" />
+      <p v-if="errors.firstName" class="errorMessage">{{ errors.firstName }}</p>
+
+      <label for="lastName">Last name</label>
+      <input id="lastName" v-model="form.lastName" type="text" autocomplete="family-name" />
+      <p v-if="errors.lastName" class="errorMessage">{{ errors.lastName }}</p>
 
       <label for="email">Email</label>
       <input id="email" v-model="form.email" type="email" autocomplete="email" />
